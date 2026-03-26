@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { Button, Input } from '../../components';
@@ -65,6 +66,10 @@ export function SignupScreen({ navigation }: SignupScreenProps) {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
+          <Image
+            source={require('../../../App_Logo/LynkUp_BD.png')}
+            style={styles.logoImage}
+          />
           <Text style={styles.logo}>LynkUp</Text>
           <Text style={styles.subtitle}>Merchant Portal</Text>
         </View>
@@ -140,6 +145,12 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 40,
+  },
+  logoImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 24,
+    marginBottom: 16,
   },
   logo: {
     fontSize: 32,
