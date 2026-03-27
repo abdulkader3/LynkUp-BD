@@ -12,15 +12,10 @@ import {
 } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { Button, Input } from '../../components';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type AuthStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-};
+import { reset, navigationRef } from '../../navigation/rootNavigation';
 
 interface LoginScreenProps {
-  navigation: NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+  navigation?: any;
 }
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
@@ -36,6 +31,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
 
     try {
       await login(email.trim(), password);
+      reset('Main');
     } catch {
       Alert.alert('Login Failed', error || 'Invalid credentials');
       clearError();

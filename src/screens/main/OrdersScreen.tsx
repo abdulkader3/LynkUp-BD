@@ -11,8 +11,8 @@ export function OrdersScreen() {
 
   const fetchOrders = async () => {
     try {
-      const data = await apiClient.getOrders();
-      setOrders(data);
+      const data = await apiClient.getMyOrders();
+      setOrders(data.data);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
     } finally {
@@ -57,7 +57,7 @@ export function OrdersScreen() {
   const renderOrder = ({ item }: { item: Order }) => (
     <Card style={styles.orderCard}>
       <View style={styles.orderHeader}>
-        <Text style={styles.orderId}>Order #{item.id.slice(-8)}</Text>
+        <Text style={styles.orderId}>Order #{item._id.slice(-8)}</Text>
         <View
           style={[
             styles.statusBadge,
@@ -72,7 +72,7 @@ export function OrdersScreen() {
         </View>
       </View>
 
-      <Text style={styles.offerName}>{item.offerName}</Text>
+      <Text style={styles.offerName}>{item.offer?.packageName || 'Offer'}</Text>
 
       <View style={styles.orderDetails}>
         <View style={styles.detailItem}>
@@ -102,7 +102,7 @@ export function OrdersScreen() {
       <FlatList
         data={orders}
         renderItem={renderOrder}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         contentContainerStyle={styles.list}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

@@ -12,7 +12,7 @@ export function CommissionsScreen() {
   const fetchCommissions = async () => {
     try {
       const data = await apiClient.getCommissions();
-      setCommissions(data);
+      setCommissions(data.data);
     } catch (error) {
       console.error('Failed to fetch commissions:', error);
     } finally {
@@ -48,13 +48,13 @@ export function CommissionsScreen() {
   const renderCommission = ({ item }: { item: Commission }) => (
     <Card style={styles.commissionCard}>
       <View style={styles.commissionHeader}>
-        <Text style={styles.orderId}>Order #{item.orderId.slice(-8)}</Text>
+        <Text style={styles.orderId}>
+          Order #{item.order?.slice(-8) || item._id.slice(-8)}
+        </Text>
         <Text style={styles.commissionAmount}>+${item.amount.toFixed(2)}</Text>
       </View>
       <View style={styles.commissionDetails}>
-        <Text style={styles.rateLabel}>
-          Rate: {(item.rate * 100).toFixed(1)}%
-        </Text>
+        <Text style={styles.rateLabel}>Rate: {item.rate}%</Text>
         <Text style={styles.date}>{formatDate(item.createdAt)}</Text>
       </View>
     </Card>
@@ -69,7 +69,7 @@ export function CommissionsScreen() {
       <FlatList
         data={commissions}
         renderItem={renderCommission}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         contentContainerStyle={styles.list}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

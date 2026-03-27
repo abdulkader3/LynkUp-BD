@@ -17,7 +17,7 @@ export function WalletScreen() {
         apiClient.getTransactions(),
       ]);
       setWallet(walletData);
-      setTransactions(transactionsData);
+      setTransactions(transactionsData.data);
     } catch (error) {
       console.error('Failed to fetch wallet data:', error);
     } finally {
@@ -70,7 +70,7 @@ export function WalletScreen() {
       <FlatList
         data={transactions}
         renderItem={renderTransaction}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         contentContainerStyle={styles.list}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

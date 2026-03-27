@@ -40,14 +40,14 @@ export function BuyOfferScreen({ navigation, route }: BuyOfferScreenProps) {
       return;
     }
 
-    if (qty < 1 || qty > offer.stock) {
-      Alert.alert('Error', `Quantity must be between 1 and ${offer.stock}`);
+    if (qty < 1) {
+      Alert.alert('Error', 'Quantity must be at least 1');
       return;
     }
 
     setLoading(true);
     try {
-      await apiClient.buyOffer(offer.id, qty, customerPhone.trim());
+      await apiClient.buyOffer(offer._id, customerPhone.trim(), 'wallet');
       Alert.alert('Success', 'Order placed successfully!', [
         {
           text: 'OK',
@@ -71,7 +71,7 @@ export function BuyOfferScreen({ navigation, route }: BuyOfferScreenProps) {
     >
       <ScrollView contentContainerStyle={styles.content}>
         <Card style={styles.offerDetails}>
-          <Text style={styles.offerName}>{offer.name}</Text>
+          <Text style={styles.offerName}>{offer.packageName}</Text>
           <Text style={styles.offerDescription}>{offer.description}</Text>
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>Price:</Text>
@@ -84,9 +84,21 @@ export function BuyOfferScreen({ navigation, route }: BuyOfferScreenProps) {
             </Text>
           </View>
           <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Available Stock:</Text>
-            <Text style={styles.priceValue}>{offer.stock}</Text>
+            <Text style={styles.priceLabel}>Operator:</Text>
+            <Text style={styles.priceValue}>
+              {offer.operator.toUpperCase()}
+            </Text>
           </View>
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Category:</Text>
+            <Text style={styles.priceValue}>{offer.category}</Text>
+          </View>
+          {offer.validity && (
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>Validity:</Text>
+              <Text style={styles.priceValue}>{offer.validity}</Text>
+            </View>
+          )}
         </Card>
 
         <Card title="Order Details" style={styles.orderForm}>
@@ -100,7 +112,7 @@ export function BuyOfferScreen({ navigation, route }: BuyOfferScreenProps) {
 
           <Input
             label="Customer Phone Number"
-            placeholder="Enter customer phone"
+            placeholder="Enter customer phone (e.g., 01712345678)"
             value={customerPhone}
             onChangeText={setCustomerPhone}
             keyboardType="phone-pad"
@@ -123,7 +135,7 @@ export function BuyOfferScreen({ navigation, route }: BuyOfferScreenProps) {
             title="Place Order"
             onPress={handleBuy}
             loading={loading}
-            disabled={!offer.isActive || offer.stock <= 0}
+            disabled={!offer.isActive}
             style={styles.buyButton}
           />
         </Card>

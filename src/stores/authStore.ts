@@ -8,6 +8,7 @@ interface AuthState {
   token: string | null;
   user: User | null;
   isLoading: boolean;
+  isInitialized: boolean;
   error: string | null;
 
   login: (email: string, password: string) => Promise<void>;
@@ -22,15 +23,16 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isLoading: false,
+      isInitialized: false,
       error: null,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
           const response = await apiClient.login({ email, password });
-          apiClient.setToken(response.token);
+          apiClient.setToken(response.accessToken);
           set({
-            token: response.token,
+            token: response.accessToken,
             user: response.user,
             isLoading: false,
           });
@@ -43,17 +45,29 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      signup: async (email: string, password: string, name: string) => {
+      signup: async (
+        email: string,
+        password: string,
+        name: string,
+        phone?: string,
+      ) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await apiClient.signup({ email, password, name });
-          apiClient.setToken(response.token);
+          console.log('Signup request:', { email, name, phone });
+          const response = await apiClient.signup({
+            email,
+            password,
+            name,
+            phone,
+          });
+          console.log('Signup response:', response);
           set({
-            token: response.token,
-            user: response.user,
+            token: null,
+            user: null,
             isLoading: false,
           });
         } catch (error) {
+          console.log('Signup error:', error);
           set({
             error: error instanceof Error ? error.message : 'Signup failed',
             isLoading: false,
@@ -79,6 +93,9 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => state => {
         if (state?.token) {
           apiClient.setToken(state.token);
+        }
+        if (state) {
+          state.isInitialized = true;
         }
       },
     },

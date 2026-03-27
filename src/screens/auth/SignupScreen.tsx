@@ -51,10 +51,22 @@ export function SignupScreen({ navigation }: SignupScreenProps) {
       return;
     }
 
+    let errorMessage = 'Could not create account';
+
     try {
       await signup(email.trim(), password, name.trim());
-    } catch {
-      Alert.alert('Signup Failed', error || 'Could not create account');
+      navigation.navigate('Login');
+    } catch (err) {
+      console.log('SignupScreen catch - err:', err);
+      console.log('SignupScreen catch - error state:', error);
+
+      if (error) {
+        errorMessage = error;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
+      Alert.alert('Signup Failed', errorMessage);
       clearError();
     }
   };

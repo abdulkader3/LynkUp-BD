@@ -6,3 +6,4 @@ export { BuyOfferScreen } from './main/BuyOfferScreen';
 export { WalletScreen } from './main/WalletScreen';
 export { OrdersScreen } from './main/OrdersScreen';
 export { CommissionsScreen } from './main/CommissionsScreen';
+export { ProfileScreen } from './main/ProfileScreen';

@@ -6,6 +6,7 @@ import {
   WalletScreen,
   OrdersScreen,
   CommissionsScreen,
+  ProfileScreen,
 } from '../screens';
 import { OffersNavigator } from './OffersNavigator';
 
@@ -15,6 +16,7 @@ export type MainTabParamList = {
   Wallet: undefined;
   Orders: undefined;
   Commissions: undefined;
+  Profile: undefined;
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -64,6 +66,16 @@ function CommissionIcon({ focused }: { focused: boolean }) {
     <View style={[styles.iconContainer, focused && styles.iconFocused]}>
       <Text style={[styles.iconText, focused && styles.iconTextFocused]}>
         C
+      </Text>
+    </View>
+  );
+}
+
+function ProfileIcon({ focused }: { focused: boolean }) {
+  return (
+    <View style={[styles.iconContainer, focused && styles.iconFocused]}>
+      <Text style={[styles.iconText, focused && styles.iconTextFocused]}>
+        P
       </Text>
     </View>
   );
@@ -134,6 +146,14 @@ export function MainNavigator() {
         options={{
           title: 'Commission',
           tabBarIcon: CommissionIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ProfileIcon,
         }}
       />
     </Tab.Navigator>

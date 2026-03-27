@@ -30,7 +30,7 @@ export function OffersScreen({ navigation }: OffersScreenProps) {
   const fetchOffers = async () => {
     try {
       const data = await apiClient.getOffers();
-      setOffers(data);
+      setOffers(data.data);
     } catch (error) {
       console.error('Failed to fetch offers:', error);
       Alert.alert('Error', 'Failed to load offers');
@@ -56,7 +56,7 @@ export function OffersScreen({ navigation }: OffersScreenProps) {
     >
       <Card style={styles.offerCard}>
         <View style={styles.offerHeader}>
-          <Text style={styles.offerName}>{item.name}</Text>
+          <Text style={styles.offerName}>{item.packageName}</Text>
           <Text style={styles.offerPrice}>${item.price.toFixed(2)}</Text>
         </View>
         <Text style={styles.offerDescription} numberOfLines={2}>
@@ -68,8 +68,8 @@ export function OffersScreen({ navigation }: OffersScreenProps) {
             <Text style={styles.infoValue}>${item.commission.toFixed(2)}</Text>
           </View>
           <View style={styles.offerInfo}>
-            <Text style={styles.infoLabel}>Stock:</Text>
-            <Text style={styles.infoValue}>{item.stock}</Text>
+            <Text style={styles.infoLabel}>Category:</Text>
+            <Text style={styles.infoValue}>{item.category}</Text>
           </View>
           {!item.isActive && (
             <View style={styles.inactiveBadge}>
@@ -90,7 +90,7 @@ export function OffersScreen({ navigation }: OffersScreenProps) {
       <FlatList
         data={offers}
         renderItem={renderOffer}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         contentContainerStyle={styles.list}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
